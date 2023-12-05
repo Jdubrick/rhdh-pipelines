@@ -1,0 +1,25 @@
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
+
+COUNTER=0
+TASKS=$(yq .spec.tasks.[].taskRef.name $1)  
+FINALLY=$(yq .spec.finally.[].taskRef.name $1)  
+echo "Found tasks names: $TASKS $FINALLY"
+
+for task in $TASKS $FINALLY
+do
+#    echo "# $task" 
+if [ -f $SCRIPTDIR/../pac/tasks/$task.yaml ]; then
+    echo "pipelinesascode.tekton.dev/task-$COUNTER: \"{{values.rawUrl}}/pac/tasks/$task.yaml\""
+    let COUNTER++
+else 
+    if [ -f $SCRIPTDIR/../new-for-dance/tasks/task-$task.yaml ]; then
+        echo "pipelinesascode.tekton.dev/task-$COUNTER: \"{{values.rawUrl}}/new-for-dance/tasks/task-$task.yaml\""
+        let COUNTER++
+    else
+        echo "# MISSING $task "
+        echo "# Searched $SCRIPTDIR/../pac/tasks/$task.yaml "
+        echo "# Searched $SCRIPTDIR/../new-for-dance/tasks/task-$task.yaml"
+    fi  
+fi 
+done
+echo
