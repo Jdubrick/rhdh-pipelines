@@ -79,7 +79,7 @@ spec:
     - default: central.rhacs-operator.svc.cluster.local:443
       name: stackrox-endpoint
       type: string
-    - default: rox_api_token
+    - default: rox-api-token
       name: stackrox-secret
       type: string
   results:
