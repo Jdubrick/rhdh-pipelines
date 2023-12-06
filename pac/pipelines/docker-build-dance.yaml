@@ -82,18 +82,6 @@ spec:
     - default: stackrox-secret-not-configured
       name: stackrox-secret
       type: string
-    - default: component-id-not-configured
-      name: component-id
-      type: string
-    - default: common-password-secret-not-configured
-      name: common-password-secret
-      type: string
-    - default: git-owner-not-configured
-      name: git-owner
-      type: string
-    - default: git-host-not-configured
-      name: git-host
-      type: string
   results:
     - name: IMAGE_URL
       value: $(tasks.build-container.results.IMAGE_URL)
