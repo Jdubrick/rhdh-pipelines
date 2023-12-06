@@ -47,11 +47,16 @@ spec:
       set +x 
 
       echo "ROX_API_TOKEN = <$ROX_API_TOKEN>"
+      echo "rox_central_endpoint = <$(params.rox_central_endpoint)>" 
+
       if [[ "$ROX_API_TOKEN" == "rox_api_token" ]] ; then
         echo "rox_api_token is not set, demo will exit with success" 
         echo "TODO: configure the pipeline to have access to ROXCTL" 
         exit 0
       fi
+
+
+      echo "Download roxctl cli"
 
       IMAGE=$(params.image)@$(params.image_digest)
       curl -s -k -L -H "Authorization: Bearer $ROX_API_TOKEN" \
@@ -59,6 +64,8 @@ spec:
         --output ./roxctl  \
         > /dev/null
       chmod +x ./roxctl  > /dev/null
+      
+      echo "roxctl image check "
       ./roxctl image check \
         $( [ "$(params.insecure-skip-tls-verify)" = "true" ] && \
         echo -n "--insecure-skip-tls-verify") \
