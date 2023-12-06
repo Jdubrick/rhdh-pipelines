@@ -52,9 +52,7 @@ spec:
           echo "TODO: configure the pipeline to have access to ROXCTL" 
           exit 0
         fi
-
-        cd /workspace/repository/helm/app/out/spring-template/templates
-
+        
         curl -s -k -L -H "Authorization: Bearer $ROX_API_TOKEN" \
           "https://$(params.rox_central_endpoint)/api/cli/download/roxctl-linux" \
           --output ./roxctl  \
