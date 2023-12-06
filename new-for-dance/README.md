@@ -1,5 +1,12 @@
-New tasks for Dance copied from Burrs demos
+# New tasks for Dance copied from Burrs demos
 
-acs tasks
+## WARNING - MAINTAINED MANUALLY
+## need to be moved to build definitions
 
-rekor tasks
+1. acs tasks 
+
+### todo 
+2. rekor tasks
+3. sbom upload
+
+## remove the rest 

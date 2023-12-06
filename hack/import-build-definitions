@@ -2,11 +2,16 @@
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
 [ -x $SCRIPTDIR/configure ] && source $SCRIPTDIR/configure
 
+# Import build definition into the samples templates repo
+# This repo can be used unmodified from pac to run pipelines
+# PEs can fork, and customize and update for day 2 maintaintainance of the pipelines
+
 if [ -z "$BUILD_DEFINITIONS" ]; then 
     BUILD_DEFINITIONS="${1:-$HOME/dev/build-definitions}" 
 fi
+DEFAULT_EXPORT=$(realpath $SCRIPTDIR/../pac)
 if [ -z "$EXPORT_DIR" ]; then 
-    EXPORT_DIR="${2:-$HOME/dev/dance-standard-pipelines/pac}" 
+    EXPORT_DIR="${2:-$DEFAULT_EXPORT}" 
 fi
 
 echo "Import Pipelines From $BUILD_DEFINITIONS" 

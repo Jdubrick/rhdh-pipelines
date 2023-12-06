@@ -76,7 +76,7 @@ spec:
       description: Build a source image.
       name: build-source-image
       type: string
-    - default: central.rhacs-operator.svc.cluster.local
+    - default: central.rhacs-operator.svc.cluster.local:443
       name: stackrox-endpoint
       type: string
     - default: stackrox-secret-not-configured
@@ -249,14 +249,6 @@ spec:
           value: $(params.stackrox-endpoint)
         - name: rox_api_token
           value: $(params.stackrox-secret)
-        - name: git_host
-          value: $(params.git-host)
-        - name: git_owner
-          value: $(params.git-owner)
-        - name: component_id
-          value: $(params.component-id)
-        - name: common_password_secret
-          value: $(params.common-password-secret)
         - name: insecure-skip-tls-verify
           value: "true"
       runAfter:
