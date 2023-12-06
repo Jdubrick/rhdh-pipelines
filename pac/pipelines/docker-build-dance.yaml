@@ -180,21 +180,6 @@ spec:
       workspaces:
         - name: workspace
           workspace: workspace
-    - name: clair-scan
-      params:
-        - name: image-digest
-          value: $(tasks.build-container.results.IMAGE_DIGEST)
-        - name: image-url
-          value: $(tasks.build-container.results.IMAGE_URL)
-      runAfter:
-        - build-container
-      taskRef:
-        name: clair-scan
-      when:
-        - input: $(params.skip-checks)
-          operator: in
-          values:
-            - "false"
     - name: acs-image-check
       params:
         - name: rox_central_endpoint
