@@ -1,31 +1,31 @@
 #!/bin/bash -e
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 [ -x $SCRIPTDIR/configure ] && source $SCRIPTDIR/configure
 
 # Import build definition into the samples templates repo
 # This repo can be used unmodified from pac to run pipelines
 # PEs can fork, and customize and update for day 2 maintaintainance of the pipelines
 
-if [ -z "$BUILD_DEFINITIONS" ]; then 
-    BUILD_DEFINITIONS="${1:-$HOME/dev/build-definitions}" 
+if [ -z "$BUILD_DEFINITIONS" ]; then
+    BUILD_DEFINITIONS="${1:-$HOME/dev/build-definitions}"
 fi
 DEFAULT_EXPORT=$(realpath $SCRIPTDIR/../pac)
-if [ -z "$EXPORT_DIR" ]; then 
-    EXPORT_DIR="${2:-$DEFAULT_EXPORT}" 
+if [ -z "$EXPORT_DIR" ]; then
+    EXPORT_DIR="${2:-$DEFAULT_EXPORT}"
 fi
 
-echo "Import Pipelines From $BUILD_DEFINITIONS" 
-echo "Copy Pipelines Into $EXPORT_DIR" 
+echo "Import Pipelines From $BUILD_DEFINITIONS"
+echo "Copy Pipelines Into $EXPORT_DIR"
 
-IMPORT_TASKS_DIR=${BUILD_DEFINITIONS}/task 
+IMPORT_TASKS_DIR=${BUILD_DEFINITIONS}/task
 IMPORT_PIPELINES_DIR=${BUILD_DEFINITIONS}/pipelines
-   
+
 OUTPUT_TASKS_DIR=$EXPORT_DIR/tasks
 OUTPUT_PIPELINES_DIR=$EXPORT_DIR/pipelines
 
-rm -rf $OUTPUT_TASKS_DIR 
+rm -rf $OUTPUT_TASKS_DIR
 mkdir -p $OUTPUT_TASKS_DIR
-rm -rf $OUTPUT_PIPELINES_DIR 
+rm -rf $OUTPUT_PIPELINES_DIR
 mkdir -p $OUTPUT_PIPELINES_DIR
 
 for task in $(ls $IMPORT_TASKS_DIR); do
@@ -34,7 +34,7 @@ for task in $(ls $IMPORT_TASKS_DIR); do
   if [ -f $VERSIONDIR/$task.yaml ]; then
     cp $VERSIONDIR/$task.yaml $OUTPUT_TASKS_DIR/$task.yaml
   elif [ -f $VERSIONDIR/kustomization.yaml ]; then
-    kustomize build $VERSIONDIR > $OUTPUT_TASKS_DIR/$task.yaml 
+    kustomize build $VERSIONDIR > $OUTPUT_TASKS_DIR/$task.yaml
   else
     echo Unable to apply task in $VERSIONDIR
   fi
@@ -42,12 +42,15 @@ done
 
 if [ -d $IMPORT_PIPELINES_DIR/dance ]; then
   echo "Using Dance from Build definitions"
-  IMPORT_PIPELINES_DIR="$IMPORT_PIPELINES_DIR/dance" 
-fi 
+  IMPORT_PIPELINES_DIR="$IMPORT_PIPELINES_DIR/dance"
+else
+  echo "Failed to find dance pipelines at $IMPORT_PIPELINES_DIR/dance"
+  exit 1
+fi
 
 INDIVIDUAL_PIPELINES=$( yq .resources $IMPORT_PIPELINES_DIR/kustomization.yaml  | sed s/-// | xargs -n1 echo -n " ")
 
-for pipe in $INDIVIDUAL_PIPELINES 
+for pipe in $INDIVIDUAL_PIPELINES
 do
 echo $pipe
 PIPE_FILE_OR_DIR=$IMPORT_PIPELINES_DIR/$pipe
@@ -59,10 +62,9 @@ if [ -f $PIPE_FILE_OR_DIR ]; then
       yq e 'del(.items.[] | .spec.tasks.[] | .taskRef.version, .items.[] | .spec.finally.[] | .taskRef.version)' | \
       yq e 'del(.spec.tasks.[].taskRef.version)' | \
       yq e 'del(.spec.finally.[].taskRef.version)' | \
-      cat  > $OUTPUT_PIPELINES_DIR/$OUT_FILE.yaml 
+      cat  > $OUTPUT_PIPELINES_DIR/$OUT_FILE.yaml
   else
     echo Unable to process pipeline in $IMPORT_PIPELINES_DIR/$pipe
   fi
 
-done 
-
+done

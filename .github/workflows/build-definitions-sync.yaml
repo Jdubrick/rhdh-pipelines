@@ -1,0 +1,42 @@
+name: Pull changes from build-definitions
+
+on:
+  schedule:
+  - cron:  "0 0 * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  build-definitions-sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          path: tssc-sample-pipelines
+      - name: Checkout build-definitions
+        uses: actions/checkout@v4
+        with:
+          repository: redhat-appstudio/build-definitions
+          path: build-definitions
+      - name: Synchronize build-definitions
+        run: |
+          export BUILD_DEFINITIONS=$GITHUB_WORKSPACE/build-definitions
+          $GITHUB_WORKSPACE/tssc-sample-pipelines/hack/import-build-definitions
+      - name: Commit changes
+        run: |
+          cd $GITHUB_WORKSPACE/tssc-sample-pipelines/
+
+          if [[ -z $(git status -s) ]]; then
+              echo 'No changes has been detected'
+              exit 0
+          fi
+          echo "Updates detected"
+
+          git diff
+          git config --global user.name 'RHTAP bot'
+          git config --global user.email 'rhtap-bot@noreply.rhtap.com'
+          git commit -a -m "Sync build-definitions"
+          git push
