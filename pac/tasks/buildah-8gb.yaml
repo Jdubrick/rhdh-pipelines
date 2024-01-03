@@ -94,7 +94,6 @@ spec:
   steps:
   - computeResources:
       limits:
-        cpu: 2
         memory: 8Gi
       requests:
         cpu: 250m
@@ -128,7 +127,7 @@ spec:
         exit 1
       fi
       if [ -n "$JVM_BUILD_WORKSPACE_ARTIFACT_CACHE_PORT_80_TCP_ADDR" ] && grep -q '^\s*RUN \(./\)\?mvn' "$dockerfile_path"; then
-        sed -i -e "s|^\s*RUN \(\(./\)\?mvn\(.*\)\)|RUN echo \"<settings><mirrors><mirror><id>mirror.default</id><url>http://$JVM_BUILD_WORKSPACE_ARTIFACT_CACHE_PORT_80_TCP_ADDR/v1/cache/default/0/</url><mirrorOf>*</mirrorOf></mirror></mirrors></settings>\" > /tmp/settings.yaml; \1 -s /tmp/settings.yaml|g" "$dockerfile_path"
+        sed -i -e "s|^\s*RUN \(\(./\)\?mvn\)\(.*\)|RUN echo \"<settings><mirrors><mirror><id>mirror.default</id><url>http://$JVM_BUILD_WORKSPACE_ARTIFACT_CACHE_PORT_80_TCP_ADDR/v1/cache/default/0/</url><mirrorOf>*</mirrorOf></mirror></mirrors></settings>\" > /tmp/settings.yaml; \1 -s /tmp/settings.yaml \3|g" "$dockerfile_path"
         touch /var/lib/containers/java
       fi
 
@@ -181,6 +180,9 @@ spec:
       if [ -n "${PREFETCH_INPUT}" ]; then
         cp /tmp/cachi2/output/bom.json ./sbom-cachi2.json
       fi
+
+      # Expose base image digests
+      buildah images --format '{{ .Name }}:{{ .Tag }}@{{ .Digest }}' | grep -v $IMAGE > $(results.BASE_IMAGES_DIGESTS.path)
     securityContext:
       capabilities:
         add:
@@ -189,7 +191,7 @@ spec:
     - mountPath: /var/lib/containers
       name: varlibcontainers
     workingDir: $(workspaces.source.path)
-  - image: quay.io/redhat-appstudio/syft:v0.97.1
+  - image: quay.io/redhat-appstudio/syft:v0.98.0@sha256:4d3856e6a2622700b9a9d5d74d9aaf5d8a55671653f80bf6c636677658680ede
     name: sbom-syft-generate
     script: |
       syft dir:$(workspaces.source.path)/source --output cyclonedx-json=$(workspaces.source.path)/sbom-source.json
@@ -198,7 +200,7 @@ spec:
     volumeMounts:
     - mountPath: /var/lib/containers
       name: varlibcontainers
-  - image: quay.io/redhat-appstudio/hacbs-jvm-build-request-processor:1d417e6f1f3e68c6c537333b5759796eddae0afc
+  - image: quay.io/redhat-appstudio/hacbs-jvm-build-request-processor:127ee0c223a2b56a9bd20a6f2eaeed3bd6015f77
     name: analyse-dependencies-java-sbom
     script: |
       if [ -f /var/lib/containers/java ]; then
@@ -212,7 +214,7 @@ spec:
     volumeMounts:
     - mountPath: /var/lib/containers
       name: varlibcontainers
-  - image: registry.access.redhat.com/ubi9/python-39:1-143.1696863474
+  - image: registry.access.redhat.com/ubi9/python-39:1-158@sha256:967000729b17efdea309e297f4b1961c38b902a1ef18f6d886b8086c2a12f01f
     name: merge-syft-sboms
     script: |
       #!/bin/python3
@@ -259,7 +261,7 @@ spec:
     securityContext:
       runAsUser: 0
     workingDir: $(workspaces.source.path)
-  - image: registry.access.redhat.com/ubi9/python-39:1-143.1696863474
+  - image: registry.access.redhat.com/ubi9/python-39:1-158@sha256:967000729b17efdea309e297f4b1961c38b902a1ef18f6d886b8086c2a12f01f
     name: create-purl-sbom
     script: |
       #!/bin/python3
@@ -280,9 +282,6 @@ spec:
     image: $(params.BUILDER_IMAGE)
     name: inject-sbom-and-push
     script: |
-      # Expose base image digests
-      buildah images --format '{{ .Name }}:{{ .Tag }}@{{ .Digest }}' | grep -v $IMAGE > $(results.BASE_IMAGES_DIGESTS.path)
-
       base_image_name=$(buildah inspect --format '{{ index .ImageAnnotations "org.opencontainers.image.base.name"}}' $IMAGE | cut -f1 -d'@')
       base_image_digest=$(buildah inspect --format '{{ index .ImageAnnotations "org.opencontainers.image.base.digest"}}' $IMAGE)
       container=$(buildah from --pull-never $IMAGE)
@@ -326,7 +325,7 @@ spec:
     - --type
     - cyclonedx
     - $(params.IMAGE)
-    image: quay.io/redhat-appstudio/cosign:v2.1.1
+    image: quay.io/redhat-appstudio/cosign:v2.1.1@sha256:c883d6f8d39148f2cea71bff4622d196d89df3e510f36c140c097b932f0dd5d5
     name: upload-sbom
     workingDir: $(workspaces.source.path)
   volumes:
