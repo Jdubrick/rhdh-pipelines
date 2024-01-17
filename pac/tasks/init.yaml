@@ -1,8 +1,8 @@
-apiVersion: tekton.dev/v1
+apiVersion: tekton.dev/v1beta1
 kind: Task
 metadata:
   labels:
-    app.kubernetes.io/version: "0.1"
+    app.kubernetes.io/version: "0.2"
   annotations:
     tekton.dev/pipelines.minVersion: "0.12.1"
     tekton.dev/tags: "appstudio, hacbs"
@@ -19,27 +19,13 @@ spec:
     - name: skip-checks
       description: Skip checks against built image
       default: "false"
-    - name: skip-optional
-      default: "true"
-      description: Skip optional checks, set false if you want to run optional checks
-    - name: pipelinerun-name
-      description: unused, should be removed in next task version
-      default: ""
-    - name: pipelinerun-uid
-      description: unused, should be removed in next task version
-      default: ""
   results:
     - name: build
       description: Defines if the image in param image-url should be built
-    - name: container-registry-secret
-      description: unused, should be removed in next task version
 
   steps:
     - name: init
       image: registry.redhat.io/openshift4/ose-cli:4.13@sha256:73df37794ffff7de1101016c23dc623e4990810390ebdabcbbfa065214352c7c
-      # per https://kubernetes.io/docs/concepts/containers/images/#imagepullpolicy-defaulting
-      # the cluster will set imagePullPolicy to IfNotPresent
-      # also per direction from Ralph Bean, we want to use image digest based tags to use a cue to automation like dependabot or renovatebot to periodially submit pull requests that update the digest as new images are released.
       env:
         - name: IMAGE_URL
           value: $(params.image-url)
@@ -47,8 +33,6 @@ spec:
           value: $(params.rebuild)
         - name: SKIP_CHECKS
           value: $(params.skip-checks)
-        - name: SKIP_OPTIONAL
-          value: $(params.skip-optional)
       script: |
         #!/bin/bash
         echo "Build Initialize: $IMAGE_URL"
@@ -61,4 +45,3 @@ spec:
         else
           echo -n "false" > $(results.build.path)
         fi
-        echo unused > $(results.container-registry-secret.path)
