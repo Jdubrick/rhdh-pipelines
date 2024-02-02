@@ -38,5 +38,6 @@ jobs:
           git diff
           git config --global user.name 'RHTAP bot'
           git config --global user.email 'rhtap-bot@noreply.rhtap.com'
-          git commit -a -m "Sync build-definitions"
+          git add .
+          git commit -m "Sync build-definitions"
           git push
