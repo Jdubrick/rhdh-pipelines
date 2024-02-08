@@ -5,7 +5,7 @@ metadata:
     pipelines.openshift.io/runtime: generic
     pipelines.openshift.io/strategy: docker
     pipelines.openshift.io/used-by: build-cloud
-  name: docker-build-dance
+  name: docker-build-rhtap
 spec:
   finally:
     - name: show-sbom
@@ -72,7 +72,7 @@ spec:
       description: Build a source image.
       name: build-source-image
       type: string
-    - default: central.rhacs-operator.svc.cluster.local:443
+    - default: rox.stackrox.io:443
       name: stackrox-endpoint
       type: string
     - default: rox-api-token
@@ -181,34 +181,31 @@ spec:
             - "false"
     - name: acs-image-check
       params:
-        - name: rox_central_endpoint
+        - name: rox-central-endpoint
           value: $(params.stackrox-endpoint)
-        - name: rox_api_token
+        - name: rox-api-token-secret-name
           value: $(params.stackrox-secret)
         - name: image
           value: $(params.output-image)
         - name: insecure-skip-tls-verify
           value: "true"
-        - name: image_digest
+        - name: image-digest
           value: $(tasks.build-container.results.IMAGE_DIGEST)
       runAfter:
         - build-container
       taskRef:
         name: acs-image-check
-      workspaces:
-        - name: workspace
-          workspace: workspace
     - name: acs-image-scan
       params:
-        - name: rox_central_endpoint
+        - name: rox-central-endpoint
           value: $(params.stackrox-endpoint)
-        - name: rox_api_token
+        - name: rox-api-token-secret-name
           value: $(params.stackrox-secret)
         - name: image
           value: $(params.output-image)
         - name: insecure-skip-tls-verify
           value: "true"
-        - name: image_digest
+        - name: image-digest
           value: $(tasks.build-container.results.IMAGE_DIGEST)
       runAfter:
         - build-container
@@ -217,9 +214,9 @@ spec:
         name: acs-image-scan
     - name: acs-deploy-check
       params:
-        - name: rox_central_endpoint
+        - name: rox-central-endpoint
           value: $(params.stackrox-endpoint)
-        - name: rox_api_token
+        - name: rox-api-token-secret-name
           value: $(params.stackrox-secret)
         - name: insecure-skip-tls-verify
           value: "true"
