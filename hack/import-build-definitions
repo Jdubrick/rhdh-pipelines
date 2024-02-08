@@ -40,11 +40,11 @@ for task in $(ls $IMPORT_TASKS_DIR); do
   fi
 done
 
-if [ -d $IMPORT_PIPELINES_DIR/dance ]; then
-  echo "Using Dance from Build definitions"
-  IMPORT_PIPELINES_DIR="$IMPORT_PIPELINES_DIR/dance"
+if [ -d $IMPORT_PIPELINES_DIR/rhtap ]; then
+  echo "Using RHTAP from Build definitions"
+  IMPORT_PIPELINES_DIR="$IMPORT_PIPELINES_DIR/rhtap"
 else
-  echo "Failed to find dance pipelines at $IMPORT_PIPELINES_DIR/dance"
+  echo "Failed to find rhtap pipelines at $IMPORT_PIPELINES_DIR/rhtap"
   exit 1
 fi
 
