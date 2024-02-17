@@ -18,7 +18,8 @@ metadata:
     pipelinesascode.tekton.dev/task-7: "{{values.rawUrl}}/pac/tasks/acs-deploy-check.yaml"
     pipelinesascode.tekton.dev/task-8: "{{values.rawUrl}}/pac/tasks/show-sbom.yaml"
     pipelinesascode.tekton.dev/task-9: "{{values.rawUrl}}/pac/tasks/summary.yaml"
-spec: 
+    pipelinesascode.tekton.dev/task-10: "{{values.rawUrl}}/pac/tasks/update-deployment.yaml"
+spec:
   params:
   - name: dockerfile
     value: {{ values.dockerfile }}
@@ -36,7 +37,7 @@ spec:
     name: docker-build-rhtap
   workspaces:
     - name: workspace
-      volumeClaimTemplate: 
+      volumeClaimTemplate:
         spec:
           accessModes:
           - ReadWriteOnce
