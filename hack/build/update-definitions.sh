@@ -7,7 +7,7 @@
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 ROOT_DIR=$SCRIPT_DIR/../..
 
-${ROOT_DIR}/hack/import-build-definitions
+"${ROOT_DIR}"/hack/import-build-definitions
 
-oc apply -f ${ROOT_DIR}/pac/tasks
-oc apply -f ${ROOT_DIR}/pac/pipelines
+oc apply -f "${ROOT_DIR}"/pac/tasks
+oc apply -f "${ROOT_DIR}"/pac/pipelines

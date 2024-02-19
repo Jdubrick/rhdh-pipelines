@@ -2,13 +2,18 @@
 
 SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 
+# Default values
+default_config_file="${SCRIPT_DIR}/build-config.env"
+
 # Load build credentials and configuration
-config_file="${SCRIPT_DIR}/build-config.env"
-if [ ! -f $config_file ]; then
+CONFIG_FILE="${CONFIG_FILE:-$default_config_file}"
+if [ ! -f "${CONFIG_FILE}" ]; then
   echo "$SCRIPT_DIR/build-config.env does not exists. Look at instructions in $SCRIPT_DIR/build-config-template.env"
   exit 1
 fi
-source "$config_file"
+
+# shellcheck source=/dev/null
+source "${CONFIG_FILE}"
 
 NAMESPACE=$(oc config view --minify -o 'jsonpath={..namespace}')
 
@@ -23,13 +28,13 @@ function provisionNamespace() {
     oc create serviceaccount rhtap-pipeline
 
     oc create secret docker-registry docker-push-secret \
-      --docker-server=${IMAGE_REPOSITORY} --docker-username=${DOCKER_USERNAME} --docker-password=${DOCKER_PASSWORD}
+      --docker-server="${IMAGE_REPOSITORY}" --docker-username="${DOCKER_USERNAME}" --docker-password="${DOCKER_PASSWORD}"
     oc secret link rhtap-pipeline docker-push-secret
     oc secret link rhtap-pipeline docker-push-secret --for=pull,mount
 
-    oc create rolebinding rhtap-pipelines-runner --clusterrole=rhtap-pipelines-runner --serviceaccount=${NAMESPACE}:rhtap-pipeline
+    oc create rolebinding rhtap-pipelines-runner --clusterrole=rhtap-pipelines-runner --serviceaccount="${NAMESPACE}":rhtap-pipeline
 
-    oc create secret generic rox-api-token --from-literal=rox-api-token=${ROX_TOKEN}
+    oc create secret generic rox-api-token --from-literal=rox-api-token="${ROX_TOKEN}"
 }
 
 function cleanCluster() {
