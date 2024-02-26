@@ -11,15 +11,9 @@ do
 if [ -f $SCRIPTDIR/../pac/tasks/$task.yaml ]; then
     echo "pipelinesascode.tekton.dev/task-$COUNTER: \"{{values.rawUrl}}/pac/tasks/$task.yaml\""
     let COUNTER++
-else 
-    if [ -f $SCRIPTDIR/../new-for-dance/tasks/task-$task.yaml ]; then
-        echo "pipelinesascode.tekton.dev/task-$COUNTER: \"{{values.rawUrl}}/new-for-dance/tasks/task-$task.yaml\""
-        let COUNTER++
-    else
-        echo "# MISSING $task "
-        echo "# Searched $SCRIPTDIR/../pac/tasks/$task.yaml "
-        echo "# Searched $SCRIPTDIR/../new-for-dance/tasks/task-$task.yaml"
-    fi  
+else  
+    echo "# MISSING $task "
+    echo "# Searched $SCRIPTDIR/../pac/tasks/$task.yaml "
 fi 
 done
 echo
