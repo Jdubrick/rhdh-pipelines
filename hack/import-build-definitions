@@ -28,17 +28,7 @@ mkdir -p $OUTPUT_TASKS_DIR
 rm -rf $OUTPUT_PIPELINES_DIR
 mkdir -p $OUTPUT_PIPELINES_DIR
 
-for task in $(ls $IMPORT_TASKS_DIR); do
-  VERSIONDIR=$(ls -d $IMPORT_TASKS_DIR/$task/*/ | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1)
-  echo $task.yaml
-  if [ -f $VERSIONDIR/$task.yaml ]; then
-    cp $VERSIONDIR/$task.yaml $OUTPUT_TASKS_DIR/$task.yaml
-  elif [ -f $VERSIONDIR/kustomization.yaml ]; then
-    kustomize build $VERSIONDIR > $OUTPUT_TASKS_DIR/$task.yaml
-  else
-    echo Unable to apply task in $VERSIONDIR
-  fi
-done
+
 
 if [ -d $IMPORT_PIPELINES_DIR/rhtap ]; then
   echo "Using RHTAP from Build definitions"
@@ -48,6 +38,7 @@ else
   exit 1
 fi
 
+# do pipelines first, and then only copy tasks required by those pipelines 
 INDIVIDUAL_PIPELINES=$( yq .resources $IMPORT_PIPELINES_DIR/kustomization.yaml  | sed s/-// | xargs -n1 echo -n " ")
 
 for pipe in $INDIVIDUAL_PIPELINES
@@ -68,3 +59,26 @@ if [ -f $PIPE_FILE_OR_DIR ]; then
   fi
 
 done
+
+for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
+  echo $pipeline 
+  TASKS=$(yq .spec.tasks.[].taskRef.name $pipeline )  
+  FINALLY=$(yq .spec.finally.[].taskRef.name $pipeline )  
+  for task in $TASKS $FINALLY
+  do
+    echo "Copy $task due to reference in $pipeline" 
+    VERSIONDIR=$(ls -d $IMPORT_TASKS_DIR/$task/*/ | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1)
+    echo $task.yaml
+    if [ -f $VERSIONDIR/$task.yaml ]; then
+      cp $VERSIONDIR/$task.yaml $OUTPUT_TASKS_DIR/$task.yaml
+    elif [ -f $VERSIONDIR/kustomization.yaml ]; then
+      kustomize build $VERSIONDIR > $OUTPUT_TASKS_DIR/$task.yaml
+    else
+      echo Unable to apply task in $VERSIONDIR
+    fi 
+  done 
+done
+
+  
+
+ 

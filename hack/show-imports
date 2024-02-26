@@ -1,19 +1,26 @@
 SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
+ 
+PIPELINES="${1:-$SCRIPTDIR/../pac/pipelines}" 
 
-COUNTER=0
-TASKS=$(yq .spec.tasks.[].taskRef.name $1)  
-FINALLY=$(yq .spec.finally.[].taskRef.name $1)  
-echo "Found tasks names: $TASKS $FINALLY"
+function showimports() {  
+    COUNTER=0
+    TASKS=$(yq .spec.tasks.[].taskRef.name $1)  
+    FINALLY=$(yq .spec.finally.[].taskRef.name $1)  
+    echo "Found tasks names: $TASKS $FINALLY"
 
-for task in $TASKS $FINALLY
-do
-#    echo "# $task" 
-if [ -f $SCRIPTDIR/../pac/tasks/$task.yaml ]; then
-    echo "pipelinesascode.tekton.dev/task-$COUNTER: \"{{values.rawUrl}}/pac/tasks/$task.yaml\""
-    let COUNTER++
-else  
-    echo "# MISSING $task "
-    echo "# Searched $SCRIPTDIR/../pac/tasks/$task.yaml "
-fi 
-done
-echo
+    for task in $TASKS $FINALLY
+    do
+    #    echo "# $task" 
+    if [ -f $SCRIPTDIR/../pac/tasks/$task.yaml ]; then
+        echo "pipelinesascode.tekton.dev/task-$COUNTER: \"{{values.rawUrl}}/pac/tasks/$task.yaml\""
+        let COUNTER++
+    else  
+        echo "# MISSING $task "
+        echo "# Searched $SCRIPTDIR/../pac/tasks/$task.yaml "
+    fi 
+    done
+    echo 
+}
+for pipeline in $PIPELINES/*;do
+    showimports $pipeline
+done 
