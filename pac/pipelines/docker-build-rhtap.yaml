@@ -86,6 +86,8 @@ spec:
       value: $(tasks.clone-repository.results.url)
     - name: CHAINS-GIT_COMMIT
       value: $(tasks.clone-repository.results.commit)
+    - name: ACS_SCAN_OUTPUT
+      value: $(tasks.acs-image-scan.results.SCAN_OUTPUT)
   tasks:
     - name: init
       params:
