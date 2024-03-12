@@ -1,40 +1,38 @@
-# dance-standard-pipelines
+# RHTAP standard pipelines
 
-These pipelines are in standard tekton format. They can be found in ./pac/pipelines and ./pac/tasks.
-The .tekton directories for default pipeline can be found in the ./pac as builders
+These pipelines are in standard tekton format.
+They can be found in ./pac/pipelines and ./pac/tasks.
 
-THis repository also has openshift formatted templates in ./openshift-templates
+# Installation and usage
 
-# Install 
+Depending on the use case there are two ways of consuming of the RHTAP pipeline:
+ - [consuming unmodified pipeline](#consuming-unmodified-pipeline)
+ - [consuming customized pipeline](#consuming-customized-pipeline)
 
-1. To use these pipelines, copy the appropriate build from ./pac into .tekton and customize as needed.
+## Consuming unmodified pipeline
 
-    - `docker-build-shared` uses dockerfiles to build your app 
-    - `nodejs-build` node - npm based build for node.js 
-    - `java-build` -  s2i-java builder
-  
-    - PaC Pipeline Runs marked `shared` will use a shared configuration for automatic pipeline updates from your centrally managed Standard Pipelines
+For this scenario, the RHTAP [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-rhtap.yaml) can be directly referenced from the [official](https://github.com/redhat-appstudio/tssc-sample-pipelines) repository.
+In such case, all the updates and security pathes will be available immediately.
+No actions required from the consumer side.
 
-3. Modify the copied files using the placeholders names in template format for the specifics for your application
+## Consuming customized pipeline
 
-   - `{{values.appName}}`  - the app name for your component 
-   - `{{values.dockerfileLocation}}`  - the dockerfile location for your component
-   - `{{values.namespace}}`  - the namespace location for your component
-   - `{{values.image}}`  - the image for your destination 
-   - `{{values.namespace}}`  - the namespace location for your component
-   - `{{values.buildContext}}`  - the namespace location for your component
-   - `{{values.repoURL}}` - the repository url for the generated repository
-    
+If any customization to the default RHTAP [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-rhtap.yaml) is needed or immediate updates are not desired, workflow described in this secrtion should be taken.
+
+Fork this repository and modify the default RHTAP pipeline definition according to your needs.
+Reference the modified version of the pipeline.
+
+To consume CVEs fixes and pipeline updates, one should rebase changes in the fork on top of the new RHTAP pipeline version.
 
 ## Backstage
-Modify the template placeholders to match your backstage template vars  
-Note, PaC also has `{{variables}}` and you should not modify those. 
 
-   - `{{values.appName}} -> ${{ values.appName }}`   
-   - `{{values.dockerfileLocation}}-> ${{ values.dockerfileLocation }} `  
-   - `{{values.namespace}}-> ${{ values.namespace }} ` 
-   - `{{values.image}}-> ${{ values.image }} ` 
-   - `{{values.namespace}}-> ${{ values.namespace }} ` 
-   - `{{values.buildContext}}-> ${{ values.buildContext }} `  
-   - `{{values.repoURL}}-> ${{values.repoURL}}`  
-     
+Modify the template placeholders to match your backstage template vars
+Note, PaC also has `{{variables}}` and you should not modify those.
+
+   - `{{values.appName}} -> ${{ values.appName }}`
+   - `{{values.dockerfileLocation}}-> ${{ values.dockerfileLocation }} `
+   - `{{values.namespace}}-> ${{ values.namespace }} `
+   - `{{values.image}}-> ${{ values.image }} `
+   - `{{values.namespace}}-> ${{ values.namespace }} `
+   - `{{values.buildContext}}-> ${{ values.buildContext }} `
+   - `{{values.repoURL}}-> ${{values.repoURL}}`
