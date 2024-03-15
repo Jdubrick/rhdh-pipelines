@@ -26,6 +26,9 @@ spec:
           value: $(tasks.build-container.status)
       taskRef:
         name: summary
+      workspaces:
+        - name: workspace
+          workspace: workspace
   params:
     - description: Source Repository URL
       name: git-url
@@ -74,6 +77,10 @@ spec:
       type: string
     - default: rox-api-token
       name: stackrox-secret
+      type: string
+    - default: push
+      description: Event that triggered the pipeline run, e.g. push, pull_request
+      name: event-type
       type: string
   results:
     - name: IMAGE_URL
@@ -183,6 +190,11 @@ spec:
       taskRef:
         kind: Task
         name: acs-deploy-check
+      when:
+        - input: pull_request
+          operator: notin
+          values:
+            - $(params.event-type)
     - name: update-deployment
       params:
         - name: gitops-repo-url
@@ -194,6 +206,11 @@ spec:
       taskRef:
         kind: Task
         name: update-deployment
+      when:
+        - input: pull_request
+          operator: notin
+          values:
+            - $(params.event-type)
   workspaces:
     - name: workspace
     - name: git-auth
