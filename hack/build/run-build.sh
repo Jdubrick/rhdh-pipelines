@@ -8,6 +8,7 @@ default_git_revision=main
 default_docker_filepath=docker/Dockerfile
 default_config_file="${SCRIPT_DIR}/build-config.env"
 default_pipeline=docker-build-rhtap
+default_event_type=push
 
 
 # Load build credentials and configuration
@@ -24,6 +25,7 @@ GIT_REPO_URL="${GIT_REPO_URL:-$default_git_repo_url}"
 GIT_REVISION="${GIT_REVISION:-$default_git_revision}"
 OUTPUT_IMAGE="${OUTPUT_IMAGE:-$IMAGE_REPOSITORY}"
 DOCKER_FILEPATH="${DOCKER_FILEPATH:-$default_docker_filepath}"
+EVENT_TYPE="${EVENT_TYPE:-$default_event_type}"
 
 PIPELINE="${PIPELINE:-$default_pipeline}"
 
@@ -48,7 +50,7 @@ spec:
     - name: dockerfile
       value: "${DOCKER_FILEPATH}"
     - name: event-type
-      value: push
+      value: "${EVENT_TYPE}"
   taskRunTemplate:
     serviceAccountName: rhtap-pipeline
   workspaces:
