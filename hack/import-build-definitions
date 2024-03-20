@@ -107,7 +107,7 @@ bash $SCRIPTDIR/update-pipelinerun-imports
 echo "WARNING RESETTING show-sbom to old version"
 echo "New version is broken"
 cp $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml.save
+yq -i ".metadata.name=\"show-sbom-rhdh\"" $OUTPUT_TASKS_DIR/show-sbom.yaml 
 cp $OUTPUT_TASKS_DIR/show-sbom.yaml $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml
-yq -i ".metadata.name=\"show-sbom-rhdh\"" $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml 
 
  
