@@ -77,7 +77,7 @@ for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
   FINALLY=$(yq .spec.finally.[].taskRef.name $pipeline )
   # Temporarily keep some to ensure existing templates work
   # until they have been merged for backwards compatibilty  
-  KEEP="show-sbom"
+  KEEP=""
   
   echo "Tasks referenced from $(basename $pipeline):" 
   for task in $TASKS $FINALLY $KEEP
@@ -103,11 +103,3 @@ echo
 echo "update-pipelinerun-imports" 
 bash $SCRIPTDIR/update-pipelinerun-imports
 
-# hack for show-sbom issue
-echo "WARNING RESETTING show-sbom to old version"
-echo "New version is broken"
-cp $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml.save
-yq -i ".metadata.name=\"show-sbom-rhdh\"" $OUTPUT_TASKS_DIR/show-sbom.yaml 
-cp $OUTPUT_TASKS_DIR/show-sbom.yaml $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml
-
- 
