@@ -71,22 +71,24 @@ if [ $CREATE_CATALOG == "true" ]; then
 fi 
 
 for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
+  echo
   echo $pipeline 
   TASKS=$(yq .spec.tasks.[].taskRef.name $pipeline )  
   FINALLY=$(yq .spec.finally.[].taskRef.name $pipeline )
   # Temporarily keep some to ensure existing templates work
   # until they have been merged for backwards compatibilty  
-  KEEP="clair-scan sbom-json-check source-build"
+  KEEP="show-sbom"
+  
+  echo "Tasks referenced from $(basename $pipeline):" 
   for task in $TASKS $FINALLY $KEEP
   do  
     if [ $CREATE_CATALOG == "true" ]; then 
       echo "Catalog "  
       cp -r $IMPORT_TASKS_DIR/$task/ $TASKS_CATALOG_EXPORT/$task
     fi 
-
-    echo "Copy $task due to reference in $pipeline" 
+ 
     VERSIONDIR=$(ls -d $IMPORT_TASKS_DIR/$task/*/ | sort -t. -k 1,1n -k 2,2n -k 3,3n -k 4,4n | tail -n1)
-    echo $task.yaml
+    echo " $task in $task.yaml" 
     if [ -f $VERSIONDIR/$task.yaml ]; then
       cp $VERSIONDIR/$task.yaml $OUTPUT_TASKS_DIR/$task.yaml
     elif [ -f $VERSIONDIR/kustomization.yaml ]; then
@@ -96,7 +98,16 @@ for pipeline in $OUTPUT_PIPELINES_DIR/* ;  do
     fi 
   done 
 done 
+
+echo
+echo "update-pipelinerun-imports" 
 bash $SCRIPTDIR/update-pipelinerun-imports
-  
+
+# hack for show-sbom issue
+echo "WARNING RESETTING show-sbom to old version"
+echo "New version is broken"
+cp $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml.save
+cp $OUTPUT_TASKS_DIR/show-sbom.yaml $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml
+yq -i ".metadata.name=\"show-sbom-rhdh\"" $OUTPUT_TASKS_DIR/show-sbom-rhdh.yaml 
 
  

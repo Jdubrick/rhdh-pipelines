@@ -13,7 +13,7 @@ spec:
         - name: IMAGE_URL
           value: $(tasks.build-container.results.IMAGE_URL)
       taskRef:
-        name: show-sbom
+        name: show-sbom-rhdh
     - name: show-summary
       params:
         - name: pipelinerun-name
