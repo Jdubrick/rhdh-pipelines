@@ -1,0 +1,21 @@
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
+
+patches_dir=$SCRIPTDIR/patches
+
+# find tasks and see if any need post import patches 
+# patches are local changes for workaround to upstream tasks 
+# patches have the same name as the task (not the same as task file, even though they are often the same)
+task_dir=$SCRIPTDIR/../pac/tasks 
+for task in $task_dir/* ;do   
+   echo $task 
+   task_name=$(yq ".metadata.name" $task)
+   # if a directory exists with same name, patch it
+   if [ -d $patches_dir/$task_name ]; then
+      echo "Patch found for task $task_name"
+      workdir=$(mktemp -d) 
+      cp -r $patches_dir/$task_name/* $workdir
+      cp $task $workdir  
+      # rebuild the task with patches and replace 
+      kustomize build $workdir >  $task
+   fi  
+done
