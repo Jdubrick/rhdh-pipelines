@@ -11,6 +11,10 @@ spec:
       description: Gitops repo revision
       name: revision
       type: string
+    - default: main
+      description: The target branch for the pull request
+      name: target-branch
+      type: string
     - default: github.com/enterprise-contract/config//default
       description: Enterprise Contract policy to validate against
       name: ec-policy-configuration
@@ -38,6 +42,8 @@ spec:
           value: $(params.git-url)
         - name: revision
           value: $(params.revision)
+        - name: fetchTags
+          value: "true"
       taskRef:
         name: git-clone
       workspaces:
@@ -46,6 +52,9 @@ spec:
         - name: basic-auth
           workspace: git-auth
     - name: gather-deploy-images
+      params:
+        - name: TARGET_BRANCH
+          value: $(params.target-branch)
       runAfter:
         - clone-repository
       taskRef:
@@ -71,3 +80,8 @@ spec:
         - gather-deploy-images
       taskRef:
         name: verify-enterprise-contract
+      when:
+        - input: $(tasks.gather-deploy-images.results.IMAGES_TO_VERIFY)
+          operator: notin
+          values:
+            - ""
