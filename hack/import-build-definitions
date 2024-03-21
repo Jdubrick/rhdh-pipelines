@@ -102,4 +102,4 @@ done
 echo
 echo "update-pipelinerun-imports" 
 bash $SCRIPTDIR/update-pipelinerun-imports
-
+bash $SCRIPTDIR/generate-custom-tasks

@@ -1,0 +1,9 @@
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
+
+source_dirs=custom-tasks
+target_dir=$SCRIPTDIR/../pac/gitops-repo
+
+for source_dir in $source_dirs;do   
+   filename=$(oc kustomize $source_dir | yq ".metadata.name")
+   oc kustomize $source_dir > $target_dir/$filename.yaml
+done
