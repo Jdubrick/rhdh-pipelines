@@ -17,7 +17,7 @@ No actions required from the consumer side.
 
 ## Consuming customized pipeline
 
-If any customization to the default RHTAP [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-rhtap.yaml) is needed or immediate updates are not desired, workflow described in this secrtion should be taken.
+If any customization to the default RHTAP [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-rhtap.yaml) is needed or immediate updates are not desired, workflow described in this section should be taken.
 
 Fork this repository and modify the default RHTAP pipeline definition according to your needs.
 Reference the modified version of the pipeline.
