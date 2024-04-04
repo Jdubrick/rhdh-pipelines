@@ -195,10 +195,11 @@ spec:
         kind: Task
         name: acs-deploy-check
       when:
-        - input: pull_request
+        - input: $(params.event-type)
           operator: notin
           values:
-            - $(params.event-type)
+            - pull_request
+            - Merge Request
     - name: update-deployment
       params:
         - name: gitops-repo-url
@@ -213,10 +214,11 @@ spec:
         kind: Task
         name: update-deployment
       when:
-        - input: pull_request
+        - input: $(params.event-type)
           operator: notin
           values:
-            - $(params.event-type)
+            - pull_request
+            - Merge Request
   workspaces:
     - name: workspace
     - name: git-auth
