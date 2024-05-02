@@ -15,7 +15,7 @@ spec:
       description: The target branch for the pull request
       name: target-branch
       type: string
-    - default: github.com/enterprise-contract/config//default
+    - default: github.com/enterprise-contract/config//default-v0.4
       description: Enterprise Contract policy to validate against
       name: ec-policy-configuration
       type: string
