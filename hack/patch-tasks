@@ -1,21 +1,22 @@
-SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )" 
-
+SCRIPTDIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null 2>&1 && pwd )"
 patches_dir=$SCRIPTDIR/patches
 
-# find tasks and see if any need post import patches 
-# patches are local changes for workaround to upstream tasks 
-# patches have the same name as the task (not the same as task file, even though they are often the same)
-task_dir=$SCRIPTDIR/../pac/tasks 
-for task in $task_dir/* ;do   
-   echo $task 
-   task_name=$(yq ".metadata.name" $task)
-   # if a directory exists with same name, patch it
-   if [ -d $patches_dir/$task_name ]; then
-      echo "Patch found for task $task_name"
-      workdir=$(mktemp -d) 
-      cp -r $patches_dir/$task_name/* $workdir
-      cp $task $workdir  
-      # rebuild the task with patches and replace 
-      kustomize build $workdir >  $task
-   fi  
+# find tasks and pipelines and see if any need post import patches
+# patches are local changes for workarounds to upstream tasks or pipelines
+# patches have the name of the task or pipeline (not the file, even though they often match)
+for definition_type in tasks pipelines; do
+  definition_dir=$SCRIPTDIR/../pac/$definition_type
+  for definition in $definition_dir/*; do
+     echo $definition
+     name=$(yq ".metadata.name" $definition)
+     # if a directory exists with same name, patch it
+     if [ -d $patches_dir/$definition_type/$name ]; then
+        echo "Patch found for $name in $definition_type"
+        workdir=$(mktemp -d)
+        cp -r $patches_dir/$definition_type/$name/* $workdir
+        cp $definition $workdir
+        # rebuild the task with patches and replace
+        kustomize build $workdir > $definition
+     fi
+  done
 done
