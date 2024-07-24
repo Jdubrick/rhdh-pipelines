@@ -27,7 +27,7 @@ spec:
       description: The public key that EC should use to verify signatures
       name: ec-public-key
       type: string
-    - default: http://rekor-server.rhtap.svc
+    - default: http://rekor-server.rhtap-tas.svc
       description: The Rekor host that EC should use to look up transparency logs
       name: ec-rekor-host
       type: string
