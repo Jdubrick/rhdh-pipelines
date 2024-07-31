@@ -20,6 +20,8 @@ spec:
     value: '{{revision}}'     
   - name: target-branch
     value: '{{target_branch}}'
+  - name: fail-if-trustification-not-configured
+    value: 'false'
   pipelineRef:
     name: gitops-pull-request
   workspaces:
