@@ -6,8 +6,8 @@ metadata:
     build.appstudio.redhat.com/build_type: "docker"
   annotations:
     tekton.dev/pipelines.minVersion: "0.12.1"
-    tekton.dev/tags: "containers, rhtap"
-  name: buildah-rhtap
+    tekton.dev/tags: "containers, ai-rhdh"
+  name: buildah-ai-rhdh
 spec:
   description: |-
     Buildah task builds source code into a container image and pushes the image into container registry using buildah tool.

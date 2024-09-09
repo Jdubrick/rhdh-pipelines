@@ -34,6 +34,6 @@ for pac_dirs in $PAC_DIRS;do
     done 
 done 
 # temp for backwards compat with old names
-rm -rf $SCRIPTDIR/../pac/docker-build-rhtap
-cp -r $SCRIPTDIR/../pac/source-repo/ $SCRIPTDIR/../pac/docker-build-rhtap
-echo "deprecated, see ../source-repo" > $SCRIPTDIR/../pac/docker-build-rhtap/deprecated.notice
+rm -rf $SCRIPTDIR/../pac/docker-build-ai-rhdh
+cp -r $SCRIPTDIR/../pac/source-repo/ $SCRIPTDIR/../pac/docker-build-ai-rhdh
+echo "deprecated, see ../source-repo" > $SCRIPTDIR/../pac/docker-build-ai-rhdh/deprecated.notice

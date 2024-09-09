@@ -18,26 +18,26 @@ source "${CONFIG_FILE}"
 NAMESPACE=$(oc config view --minify -o 'jsonpath={..namespace}')
 
 function cleanNamespace() {
-    oc delete serviceaccount rhtap-pipeline
+    oc delete serviceaccount ai-rhdh-pipeline
     oc delete secret docker-push-secret
-    oc delete rolebinding rhtap-pipelines-runner
+    oc delete rolebinding ai-rhdh-pipelines-runner
     oc delete secret rox-api-token
 }
 
 function provisionNamespace() {
-    oc create serviceaccount rhtap-pipeline
+    oc create serviceaccount ai-rhdh-pipeline
 
     oc create secret docker-registry docker-push-secret \
       --docker-server="${IMAGE_REPOSITORY}" --docker-username="${DOCKER_USERNAME}" --docker-password="${DOCKER_PASSWORD}"
-    oc secret link rhtap-pipeline docker-push-secret
-    oc secret link rhtap-pipeline docker-push-secret --for=pull,mount
+    oc secret link ai-rhdh-pipeline docker-push-secret
+    oc secret link ai-rhdh-pipeline docker-push-secret --for=pull,mount
 
-    oc create rolebinding rhtap-pipelines-runner --clusterrole=rhtap-pipelines-runner --serviceaccount="${NAMESPACE}":rhtap-pipeline
+    oc create rolebinding ai-rhdh-pipelines-runner --clusterrole=ai-rhdh-pipelines-runner --serviceaccount="${NAMESPACE}":ai-rhdh-pipeline
 }
 
 function cleanCluster() {
-  oc delete securitycontextconstraint rhtap-pipelines-scc
-  oc delete clusterrole rhtap-pipelines-runner
+  oc delete securitycontextconstraint ai-rhdh-pipelines-scc
+  oc delete clusterrole ai-rhdh-pipelines-runner
 }
 
 function provisionCluster() {
@@ -45,7 +45,7 @@ function provisionCluster() {
     apiVersion: security.openshift.io/v1
     kind: SecurityContextConstraints
     metadata:
-      name: rhtap-pipelines-scc
+      name: ai-rhdh-pipelines-scc
     allowHostDirVolumePlugin: false
     allowHostIPC: false
     allowHostNetwork: false
@@ -84,7 +84,7 @@ EOF
     apiVersion: rbac.authorization.k8s.io/v1
     kind: ClusterRole
     metadata:
-      name: rhtap-pipelines-runner
+      name: ai-rhdh-pipelines-runner
     rules:
     - apiGroups:
         - tekton.dev
@@ -109,7 +109,7 @@ EOF
     - apiGroups:
         - security.openshift.io
       resourceNames:
-        - rhtap-pipelines-scc
+        - ai-rhdh-pipelines-scc
       resources:
         - securitycontextconstraints
       verbs:

@@ -35,10 +35,6 @@ spec:
     description: The TUF mirror that EC should use
     name: ec-tuf-mirror
     type: string
-  - default: tpa-secret
-    description: The name of the Secret that contains Trustification (TPA) configuration
-    name: trustification-secret-name
-    type: string
   - default: "true"
     description: Should the pipeline fail when there are SBOMs to upload but Trustification
       is not properly configured (i.e. the secret is missing or doesn't have all the

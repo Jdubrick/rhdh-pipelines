@@ -7,7 +7,7 @@ SCRIPT_DIR=$( cd -- "$( dirname -- "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )
 ROOT_DIR=$SCRIPT_DIR/..
 DEBUG_OUTPUT=${DEBUG_OUTPUT:-'/tmp/log.txt'}
 EVENT_TYPE=${EVENT_TYPE:-'push'}
-PIPELINE="${PIPELINE:-docker-build-rhtap}"
+PIPELINE="${PIPELINE:-docker-build-ai-rhdh}"
 TASKS=("update-deployment")
 
 NAMESPACE="test-pipeline$(shuf -i 0-9999999 -n 1)"
@@ -19,20 +19,20 @@ oc new-project "$NAMESPACE"
 wait_for_pipeline() {
     local timeout_seconds=$((15 * 60))
     if ! oc wait --for=condition=succeeded "$1" -n "$2" --timeout "${timeout_seconds}s" >"$DEBUG_OUTPUT"; then
-        echo "[ERROR] RHTAP Pipeline failed to complete successful" >&2
+        echo "[ERROR] AI-RHDH Pipeline failed to complete successful" >&2
         oc get "$1" -n "$2" -o yaml >"$DEBUG_OUTPUT"
         exit 1
     fi
 }
 
-echo "Preparing rhtap sample pipelines build resources..."
+echo "Preparing ai-rhdh sample pipelines build resources..."
 "${ROOT_DIR}"/hack/build/prepare-build-resources.sh || status="$?" || :
 
-echo "Apply the rhtap tasks and pipelines in the test namespace $NAMESPACE..."
+echo "Apply the ai-rhdh tasks and pipelines in the test namespace $NAMESPACE..."
 oc apply -f "${ROOT_DIR}/pac/tasks"
-oc apply -f "${ROOT_DIR}/pac/pipelines/docker-build-rhtap.yaml"
+oc apply -f "${ROOT_DIR}/pac/pipelines/docker-build-ai-rhdh.yaml"
 
-# Run the rhtap sample build pipeline
+# Run the ai-rhdh sample build pipeline
 "${ROOT_DIR}"/hack/build/run-build.sh || status="$?" || :
 
 wait_for_pipeline "pipelineruns/$PIPELINE" "$NAMESPACE"

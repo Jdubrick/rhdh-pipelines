@@ -11,13 +11,13 @@ Depending on the use case there are two ways of consuming of the AI-RHDH pipelin
 
 ## Consuming Unmodified Pipeline
 
-For this scenario, the AI-RHDH [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-rhtap.yaml) can be directly referenced from the [official](https://github.com/redhat-appstudio/tssc-sample-pipelines) repository.
+For this scenario, the AI-RHDH [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-ai-rhdh.yaml) can be directly referenced from the [official](https://github.com/redhat-appstudio/tssc-sample-pipelines) repository.
 In such case, all the updates and security pathes will be available immediately.
 No actions required from the consumer side.
 
 ## Consuming customized pipeline
 
-If any customization to the default AI-RHDH [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-rhtap.yaml) is needed or immediate updates are not desired, workflow described in this section should be taken.
+If any customization to the default AI-RHDH [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-ai-rhdh.yaml) is needed or immediate updates are not desired, workflow described in this section should be taken.
 
 Fork this repository and modify the default AI-RHDH pipeline definition according to your needs.
 Reference the modified version of the pipeline.

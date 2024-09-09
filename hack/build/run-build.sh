@@ -7,7 +7,7 @@ default_git_repo_url=https://github.com/devfile-samples/devfile-sample-go-basic
 default_git_revision=main
 default_docker_filepath=docker/Dockerfile
 default_config_file="${SCRIPT_DIR}/build-config.env"
-default_pipeline=docker-build-rhtap
+default_pipeline=docker-build-ai-rhdh
 default_event_type=push
 
 
@@ -52,7 +52,7 @@ spec:
     - name: event-type
       value: "${EVENT_TYPE}"
   taskRunTemplate:
-    serviceAccountName: rhtap-pipeline
+    serviceAccountName: ai-rhdh-pipeline
   workspaces:
     - name: workspace
       volumeClaimTemplate:

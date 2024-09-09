@@ -5,7 +5,7 @@ metadata:
     pipelines.openshift.io/runtime: generic
     pipelines.openshift.io/strategy: docker
     pipelines.openshift.io/used-by: build-cloud
-  name: docker-build-rhtap
+  name: docker-build-ai-rhdh
 spec:
   finally:
     - name: show-sbom
@@ -132,7 +132,7 @@ spec:
       runAfter:
         - clone-repository
       taskRef:
-        name: buildah-rhtap
+        name: buildah-ai-rhdh
       when:
         - input: $(tasks.init.results.build)
           operator: in
