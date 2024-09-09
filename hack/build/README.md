@@ -1,5 +1,5 @@
 
-Scripts in this directory help to run/test RHTAP pipeline.
+Scripts in this directory help to run/test AI-RHDH pipeline.
 
 ### Prerequisits
 
@@ -29,11 +29,11 @@ oc create namespace test && oc project test
 ```
 ./hack/build/prepare-build-resources.sh
 ```
-Note, if you need to run RHTAP pipelines in different namespace, make sure that `provisionNamespace` function from `prepare-build-resources.sh` script was run for each of the namespaces.
+Note, if you need to run AI-RHDH pipelines in different namespace, make sure that `provisionNamespace` function from `prepare-build-resources.sh` script was run for each of the namespaces.
 
 ### Development
 
-This could be skipped if you don't make changes to the RHTAP pipeline.
+This could be skipped if you don't make changes to the AI-RHDH pipeline.
 
 1. Make changes into your local build-definitions repository.
 2. Configure path to it by exporting `BUILD_DEFINITIONS` environment variable:
@@ -47,7 +47,7 @@ export BUILD_DEFINITIONS=/path/to/local/build-definitions
 Alternatively, you can use `update-definitions.sh` script that will also apply the resources in the cluster,
 so step 2 in testing section can be skipped.
 
-### Testing RHTAP pipeline
+### Testing AI-RHDH pipeline
 
 1. Define the following environment variables:
   - `GIT_REPO_URL`
