@@ -21,7 +21,6 @@ function cleanNamespace() {
     oc delete serviceaccount ai-rhdh-pipeline
     oc delete secret docker-push-secret
     oc delete rolebinding ai-rhdh-pipelines-runner
-    oc delete secret rox-api-token
 }
 
 function provisionNamespace() {

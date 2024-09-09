@@ -55,9 +55,6 @@ spec:
     - default: ""
       description: Image tag expiration time, time values could be something like 1h, 2d, 3w for hours, days, and weeks, respectively.
       name: image-expires-after
-    - default: rox-api-token
-      name: stackrox-secret
-      type: string
     - default: gitops-auth-secret
       description: 'Secret name to enable this pipeline to update the gitops repo with the new image. '
       name: gitops-auth-secret-name
