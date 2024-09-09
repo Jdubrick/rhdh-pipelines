@@ -33,11 +33,6 @@ function provisionNamespace() {
     oc secret link rhtap-pipeline docker-push-secret --for=pull,mount
 
     oc create rolebinding rhtap-pipelines-runner --clusterrole=rhtap-pipelines-runner --serviceaccount="${NAMESPACE}":rhtap-pipeline
-
-    if [ "$ROX_ENDPOINT" == 'in-cluster' ] ; then
-      ROX_ENDPOINT=$(oc get route central -o jsonpath='{.spec.host}' -n rhacs-operator):443
-    fi
-    oc create secret generic rox-api-token --from-literal=rox-api-token="${ROX_TOKEN}" --from-literal=rox-api-endpoint="${ROX_ENDPOINT}"
 }
 
 function cleanCluster() {

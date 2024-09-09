@@ -83,8 +83,6 @@ spec:
       value: $(tasks.clone-repository.results.url)
     - name: CHAINS-GIT_COMMIT
       value: $(tasks.clone-repository.results.commit)
-    - name: ACS_SCAN_OUTPUT
-      value: $(tasks.acs-image-scan.results.SCAN_OUTPUT)
   tasks:
     - name: init
       params:
@@ -143,54 +141,6 @@ spec:
       workspaces:
         - name: source
           workspace: workspace
-    - name: acs-image-check
-      params:
-        - name: rox-secret-name
-          value: $(params.stackrox-secret)
-        - name: image
-          value: $(params.output-image)
-        - name: insecure-skip-tls-verify
-          value: "true"
-        - name: image-digest
-          value: $(tasks.build-container.results.IMAGE_DIGEST)
-      runAfter:
-        - build-container
-      taskRef:
-        name: acs-image-check
-    - name: acs-image-scan
-      params:
-        - name: rox-secret-name
-          value: $(params.stackrox-secret)
-        - name: image
-          value: $(params.output-image)
-        - name: insecure-skip-tls-verify
-          value: "true"
-        - name: image-digest
-          value: $(tasks.build-container.results.IMAGE_DIGEST)
-      runAfter:
-        - build-container
-      taskRef:
-        kind: Task
-        name: acs-image-scan
-    - name: acs-deploy-check
-      params:
-        - name: rox-secret-name
-          value: $(params.stackrox-secret)
-        - name: gitops-repo-url
-          value: $(params.git-url)-gitops
-        - name: insecure-skip-tls-verify
-          value: "true"
-      runAfter:
-        - update-deployment
-      taskRef:
-        kind: Task
-        name: acs-deploy-check
-      when:
-        - input: $(params.event-type)
-          operator: notin
-          values:
-            - pull_request
-            - Merge Request
     - name: update-deployment
       params:
         - name: gitops-repo-url

@@ -4,18 +4,6 @@ Scripts in this directory help to run/test AI-RHDH pipeline.
 ### Prerequisits
 
 1. `Red Hat OpenShift Pipelines` operator installed
-2. `Advanced Cluster Security for Kubernetes` operator installed and configured:
-    1. In Openshift console go to `Operators` -> `Installed Operators` and select `Advanced Cluster Security for Kubernetes`. Under `Details` tab, in `Provided API` section create `Central` instance.
-    2. Get ACS password:
-    ```
-    oc -n rhacs-operator get secret central-htpasswd -o go-template='{{index .data "password" | base64decode}}'
-    ```
-    3. Find `Route` named `central` in `rhacs-operator` namespace and open it.
-    Login with `admin` and password obtained in the previous step.
-    Note, if the route cannot be open, check `central-db` deployment in `rhacs-operator` namespace.
-    One might need to lower CPU and memory usage of the deployment.
-    4. In the left sidebar click `Integrations` and scroll to `Authentication Tokens` section. Click `STackRox` `API Token` and `Generate Token` button. Set `rox-api-token` into name and `Continuous Integration` as role. Click `Generate`.
-    5. Save the token.
 
 ### Preparation
 

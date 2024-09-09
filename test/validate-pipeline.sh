@@ -8,7 +8,7 @@ ROOT_DIR=$SCRIPT_DIR/..
 DEBUG_OUTPUT=${DEBUG_OUTPUT:-'/tmp/log.txt'}
 EVENT_TYPE=${EVENT_TYPE:-'push'}
 PIPELINE="${PIPELINE:-docker-build-rhtap}"
-TASKS=("update-deployment" "acs-deploy-check")
+TASKS=("update-deployment")
 
 NAMESPACE="test-pipeline$(shuf -i 0-9999999 -n 1)"
 
