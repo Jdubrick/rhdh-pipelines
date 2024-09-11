@@ -31,14 +31,3 @@ spec:
       workspace: workspace
     - name: basic-auth
       workspace: git-auth
-  - name: get-images-to-verify
-    params:
-    - name: TARGET_BRANCH
-      value: $(params.target-branch)
-    runAfter:
-    - clone-repository
-    taskRef:
-      name: gather-deploy-images
-    workspaces:
-    - name: source
-      workspace: workspace

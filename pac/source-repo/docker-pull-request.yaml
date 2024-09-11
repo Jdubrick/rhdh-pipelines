@@ -10,8 +10,8 @@ metadata:
     pipelinesascode.tekton.dev/task-0: "{{values.rawUrl}}/pac/tasks/init.yaml"
     pipelinesascode.tekton.dev/task-1: "{{values.rawUrl}}/pac/tasks/git-clone.yaml"
     pipelinesascode.tekton.dev/task-2: "{{values.rawUrl}}/pac/tasks/buildah-ai-rhdh.yaml"
-    pipelinesascode.tekton.dev/task-6: "{{values.rawUrl}}/pac/tasks/update-deployment.yaml"
-    pipelinesascode.tekton.dev/task-8: "{{values.rawUrl}}/pac/tasks/summary.yaml"
+    pipelinesascode.tekton.dev/task-3: "{{values.rawUrl}}/pac/tasks/update-deployment.yaml"
+    pipelinesascode.tekton.dev/task-4: "{{values.rawUrl}}/pac/tasks/summary.yaml"
 spec:
   params:
     - name: dockerfile

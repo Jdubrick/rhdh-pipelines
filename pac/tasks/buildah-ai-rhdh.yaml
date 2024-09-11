@@ -11,7 +11,6 @@ metadata:
 spec:
   description: |-
     Buildah task builds source code into a container image and pushes the image into container registry using buildah tool.
-    In addition it generates a SBOM file, injects the SBOM file into final container image and pushes the SBOM file as separate image using cosign tool.
   params:
   - description: Reference of the image buildah will produce.
     name: IMAGE
@@ -47,8 +46,6 @@ spec:
     name: IMAGE_URL
   - description: Digests of the base images used for build
     name: BASE_IMAGES_DIGESTS
-  - description: Link to the SBOM layer pushed to the registry as part of an OCI artifact.
-    name: SBOM_BLOB_URL
   stepTemplate:
     env:
     - name: STORAGE_DRIVER
