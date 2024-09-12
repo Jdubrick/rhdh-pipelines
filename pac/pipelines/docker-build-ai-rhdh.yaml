@@ -7,28 +7,6 @@ metadata:
     pipelines.openshift.io/used-by: build-cloud
   name: docker-build-ai-rhdh
 spec:
-  finally:
-    - name: show-sbom
-      params:
-        - name: IMAGE_URL
-          value: $(tasks.build-container.results.IMAGE_URL)
-      taskRef:
-        name: show-sbom-rhdh
-    - name: show-summary
-      params:
-        - name: pipelinerun-name
-          value: $(context.pipelineRun.name)
-        - name: git-url
-          value: $(tasks.clone-repository.results.url)?rev=$(tasks.clone-repository.results.commit)
-        - name: image-url
-          value: $(params.output-image)
-        - name: build-task-status
-          value: $(tasks.build-container.status)
-      taskRef:
-        name: summary
-      workspaces:
-        - name: workspace
-          workspace: workspace
   params:
     - description: Source Repository URL
       name: git-url
