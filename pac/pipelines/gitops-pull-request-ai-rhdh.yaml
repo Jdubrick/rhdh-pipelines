@@ -59,8 +59,7 @@ spec:
       value: $(params.target-branch)
     - name: FROM_ENVIRONMENTS
       value:
-      - stage
-      - prod
+      - development
     runAfter:
     - clone-repository
     taskRef:
