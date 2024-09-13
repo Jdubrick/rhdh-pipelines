@@ -7,6 +7,9 @@ metadata:
     pipelinesascode.tekton.dev/on-target-branch: "[{{ values.defaultBranch }}]" 
     pipelinesascode.tekton.dev/pipeline: "{{values.rawUrl}}/pac/pipelines/gitops-pull-request-ai-rhdh.yaml"
     pipelinesascode.tekton.dev/task-0: "{{values.rawUrl}}/pac/tasks/git-clone.yaml"
+    pipelinesascode.tekton.dev/task-1: "{{values.rawUrl}}/pac/tasks/gather-deploy-images.yaml"
+    pipelinesascode.tekton.dev/task-2: "{{values.rawUrl}}/pac/tasks/download-sbom-from-url-in-attestation.yaml"
+    pipelinesascode.tekton.dev/task-3: "{{values.rawUrl}}/pac/tasks/upload-sbom-to-trustification.yaml"
 spec:
   params:
   - name: git-url
@@ -15,6 +18,8 @@ spec:
     value: '{{revision}}'     
   - name: target-branch
     value: '{{target_branch}}'
+  - name: fail-if-trustification-not-configured
+    value: 'false'
   pipelineRef:
     name: gitops-pull-request
   workspaces:
