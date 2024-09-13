@@ -66,45 +66,45 @@ spec:
       workspace: workspace
 - name: download-sboms
   params:
-    - name: IMAGES
-      value: $(tasks.get-images-to-upload-sbom.results.IMAGES_TO_VERIFY)
-    - name: SBOMS_DIR
-      value: sboms
-    - name: PUBLIC_KEY
-      value: $(params.ec-public-key)
-    - name: REKOR_HOST
-      value: $(params.ec-rekor-host)
-    - name: TUF_MIRROR
-      value: $(params.ec-tuf-mirror)
-    runAfter:
-    - get-images-to-upload-sbom
-    taskRef:
-      name: download-sbom-from-url-in-attestation
-    when:
-    - input: $(tasks.get-images-to-upload-sbom.results.IMAGES_TO_VERIFY)
-      operator: notin
-      values:
-      - ""
-    workspaces:
-    - name: sboms
-      workspace: workspace
+  - name: IMAGES
+    value: $(tasks.get-images-to-upload-sbom.results.IMAGES_TO_VERIFY)
+  - name: SBOMS_DIR
+    value: sboms
+  - name: PUBLIC_KEY
+    value: $(params.ec-public-key)
+  - name: REKOR_HOST
+    value: $(params.ec-rekor-host)
+  - name: TUF_MIRROR
+    value: $(params.ec-tuf-mirror)
+  runAfter:
+  - get-images-to-upload-sbom
+  taskRef:
+    name: download-sbom-from-url-in-attestation
+  when:
+  - input: $(tasks.get-images-to-upload-sbom.results.IMAGES_TO_VERIFY)
+    operator: notin
+    values:
+    - ""
+  workspaces:
+  - name: sboms
+    workspace: workspace
 - name: upload-sboms-to-trustification
   params:
-    - name: SBOMS_DIR
-      value: sboms
-    - name: TRUSTIFICATION_SECRET_NAME
-      value: $(params.trustification-secret-name)
-    - name: FAIL_IF_TRUSTIFICATION_NOT_CONFIGURED
-      value: $(params.fail-if-trustification-not-configured)
-    runAfter:
-    - download-sboms
-    taskRef:
-      name: upload-sbom-to-trustification
-    when:
-    - input: $(tasks.get-images-to-upload-sbom.results.IMAGES_TO_VERIFY)
-      operator: notin
-      values:
-      - ""
-    workspaces:
-    - name: sboms
-      workspace: workspace
+  - name: SBOMS_DIR
+    value: sboms
+  - name: TRUSTIFICATION_SECRET_NAME
+    value: $(params.trustification-secret-name)
+  - name: FAIL_IF_TRUSTIFICATION_NOT_CONFIGURED
+    value: $(params.fail-if-trustification-not-configured)
+  runAfter:
+  - download-sboms
+  taskRef:
+    name: upload-sbom-to-trustification
+  when:
+  - input: $(tasks.get-images-to-upload-sbom.results.IMAGES_TO_VERIFY)
+    operator: notin
+    values:
+    - ""
+  workspaces:
+  - name: sboms
+    workspace: workspace
