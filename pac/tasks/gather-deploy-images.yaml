@@ -19,7 +19,7 @@ spec:
     - name: ENVIRONMENTS
       description: Gather images from the manifest files for the specified environments
       type: array
-      default: ["development", "stage", "prod"]
+      default: ["development"]
   results:
     - name: IMAGES_TO_VERIFY
       description: >
