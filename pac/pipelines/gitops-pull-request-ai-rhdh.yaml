@@ -33,6 +33,10 @@ spec:
     description: The TUF mirror that EC should use
     name: ec-tuf-mirror
     type: string
+  - default: tpa-secret
+    description: The name of the Secret that contains Trustification (TPA) configuration
+    name: trustification-secret-name
+    type: string
   tasks:
   - name: clone-repository
     params:
