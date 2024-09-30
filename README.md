@@ -3,26 +3,7 @@
 These pipelines are in standard tekton format.
 They can be found in ./pac/pipelines and ./pac/tasks.
 
-# Installation and Usage
-
-Depending on the use case there are two ways of consuming of the AI-RHDH pipeline:
- - [consuming unmodified pipeline](#consuming-unmodified-pipeline)
- - [consuming customized pipeline](#consuming-customized-pipeline)
-
-## Consuming Unmodified Pipeline
-
-For this scenario, the AI-RHDH [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-ai-rhdh.yaml) can be directly referenced from the [official](https://github.com/redhat-appstudio/tssc-sample-pipelines) repository.
-In such case, all the updates and security pathes will be available immediately.
-No actions required from the consumer side.
-
-## Consuming customized pipeline
-
-If any customization to the default AI-RHDH [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines/blob/main/pac/pipelines/docker-build-ai-rhdh.yaml) is needed or immediate updates are not desired, workflow described in this section should be taken.
-
-Fork this repository and modify the default AI-RHDH pipeline definition according to your needs.
-Reference the modified version of the pipeline.
-
-To consume CVEs fixes and pipeline updates, one should rebase changes in the fork on top of the new AI-RHDH pipeline version.
+This pipeline was forked and customized from the RHTAP [pipeline definition](https://github.com/redhat-appstudio/tssc-sample-pipelines) and plans to act standalone from RHTAP.
 
 ## Backstage
 
