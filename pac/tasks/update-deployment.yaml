@@ -52,7 +52,7 @@ spec:
           exit 0
         fi
 
-        git config --global user.email "rhtap@noreplay.com"
+        git config --global user.email "redhat-ai-dev@noreply.com"
         git config --global user.name "gitops-update"
 
         git clone ${PARAM_GITOPS_REPO_URL}
