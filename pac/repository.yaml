@@ -2,5 +2,6 @@ apiVersion: "pipelinesascode.tekton.dev/v1alpha1"
 kind: Repository
 metadata:
   name: '{{values.name}}'
+  namespace: ci-hub
 spec:
   url: '{{values.repoURL}}'
