@@ -12,6 +12,7 @@ metadata:
     pipelinesascode.tekton.dev/task-2: "{{values.rawUrl}}/pac/tasks/buildah-ai-rhdh.yaml"
     pipelinesascode.tekton.dev/task-3: "{{values.rawUrl}}/pac/tasks/show-sbom-rhdh.yaml"
     pipelinesascode.tekton.dev/task-4: "{{values.rawUrl}}/pac/tasks/summary.yaml"
+  namespace: ci-hub
 spec:
   params:
     - name: dockerfile

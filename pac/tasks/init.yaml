@@ -7,6 +7,7 @@ metadata:
     tekton.dev/pipelines.minVersion: "0.12.1"
     tekton.dev/tags: "redhat-ai-dev"
   name: init
+  namespace: ci-hub
 spec:
   description: >-
     Initialize Pipeline Task, include flags for rebuild and auth. Generates image repository secret used by the PipelineRun.

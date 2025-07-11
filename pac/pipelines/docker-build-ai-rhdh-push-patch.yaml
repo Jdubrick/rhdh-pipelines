@@ -6,6 +6,7 @@ metadata:
     pipelines.openshift.io/strategy: docker
     pipelines.openshift.io/used-by: build-cloud
   name: docker-build-ai-rhdh-push-patch
+  namespace: ci-hub
 spec:
   finally:
     - name: show-sbom

@@ -11,6 +11,7 @@ metadata:
     task.results.format: application/text
     task.results.key: LINK_TO_SBOM
     task.output.location: results
+  namespace: ci-hub
 spec:
   description: >-
     Shows the Software Bill of Materials (SBOM) generated for the built image in CyloneDX JSON format. The 'task.*' annotations are processed by Red Hat Developer Hub (RHDH) so that the log content can be rendered in its UI.

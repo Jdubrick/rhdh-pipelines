@@ -10,6 +10,7 @@ metadata:
     tekton.dev/platforms: linux/amd64,linux/s390x,linux/ppc64le,linux/arm64
     tekton.dev/tags: git
   name: git-clone
+  namespace: ci-hub
 spec:
   description: |-
     The git-clone Task will clone a repo from the provided url into the output Workspace. By default the repo will be cloned into the root of your Workspace.
